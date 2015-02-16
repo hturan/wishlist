@@ -1,6 +1,8 @@
 ## Wishlist
 A React-fronted & Firebase-backed wishlist.
 
+![](http://i.imgur.com/l4YtEAJ.png)
+
 > NOTE: This project is mostly a sandbox for playing with React features and ideas. Whilst it works, it should by no means be used as an example of a well-factored React app.
 
 Whilst I work on user registration, change the `firebaseEndpoint` global to point at your personal Firebase.
