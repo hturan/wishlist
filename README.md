@@ -64,9 +64,15 @@ At some point in the not-so-distant future, I’d like to de-normalize the data 
 
 ### To Do
 ✔ ~~Editable items~~
+
 ✘ Actually usable editable items
+
 ✘ Sorting
+
 ✘ Domain visualisation (hostname, favicons)
+
 ✘ Project refactor (separate components, remove jQuery, etc)
+
 ✘ Firebase de-normalization
+
 ✘ Build tools (SASS, remove JSXTransformer)
