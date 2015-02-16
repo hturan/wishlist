@@ -1,5 +1,5 @@
 ## Wishlist
-A React-fronted & Firebase-backed wishlist.
+A React-fronted and Firebase-backed wishlist.
 
 ![](http://i.imgur.com/l4YtEAJ.png)
 
