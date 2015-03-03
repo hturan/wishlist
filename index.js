@@ -14,6 +14,12 @@ var resizeInput = function (e) {
   e.target.size = length;
 };
 
+var getHostname = function (url) {
+  var a = document.createElement("a");
+  a.href = url;
+  return a.hostname.replace('www.', '');
+};
+
 var WishlistApp = React.createClass({
   mixins: [ReactFireMixin],
 
@@ -189,6 +195,7 @@ var WishListEntry = React.createClass({
     return (
       <li className="item">
         <input className="name" defaultValue={this.state.item.title} size={this.state.item.title.length - 1} onMouseDown={this.handleTitleClick} onBlur={this.updateItemTitle} onChange={resizeInput} />
+        <span className="url">{getHostname(this.state.item.url)}</span>
         <span className="amount">{this.state.item.currency}{this.state.item.amount}</span>
         <a onClick={this.removeItem} className="delete">✖</a>
       </li>
