@@ -69,7 +69,7 @@ At some point in the not-so-distant future, I’d like to de-normalize the data 
 
 ✘ Sorting
 
-✘ Domain visualisation (hostname, favicons)
+✔ ~~Domain visualisation (hostname, favicons)~~
 
 ✘ Project refactor (separate components, remove jQuery, etc)
 
