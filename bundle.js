@@ -19734,11 +19734,27 @@
 	      });
 	    }
 	  }, {
+	    key: 'handleListCreate',
+	    value: function handleListCreate(event) {
+	      event.preventDefault();
+
+	      this.firebase.child('lists').push({
+	        title: this.listTitleInput.value
+	      });
+
+	      this.listTitleInput.value = '';
+	    }
+	  }, {
 	    key: 'handleListDelete',
 	    value: function handleListDelete(listId) {
 	      if (window.confirm('All items within this this will be deleted. Do you wish to proceed?')) {
 	        this.firebase.child('lists/' + listId).remove();
 	      }
+	    }
+	  }, {
+	    key: 'handleItemCreate',
+	    value: function handleItemCreate(listId, data) {
+	      this.firebase.child('lists/' + listId + '/items').push(data);
 	    }
 	  }, {
 	    key: 'handleItemDelete',
@@ -19749,8 +19765,6 @@
 	    key: 'handleAuth',
 	    value: function handleAuth(event) {
 	      var _this3 = this;
-
-	      console.log('handleAuth');
 
 	      event.preventDefault();
 
@@ -19787,17 +19801,29 @@
 	          return _react2.default.createElement(_List2.default, _extends({
 	            key: listId,
 	            handleListDelete: _this4.handleListDelete.bind(_this4, listId),
+	            handleItemCreate: _this4.handleItemCreate.bind(_this4, listId),
 	            handleItemDelete: _this4.handleItemDelete.bind(_this4, listId)
 	          }, _this4.state.lists[listId]));
-	        })
+	        }),
+	        _react2.default.createElement(
+	          'section',
+	          { className: 'list' },
+	          _react2.default.createElement(
+	            'form',
+	            { onSubmit: this.handleListCreate.bind(this) },
+	            _react2.default.createElement('input', { ref: function ref(_ref) {
+	                return _this4.listTitleInput = _ref;
+	              }, type: 'text', placeholder: 'New List' })
+	          )
+	        )
 	      ) : _react2.default.createElement(
 	        'form',
 	        { onSubmit: this.handleAuth.bind(this) },
-	        _react2.default.createElement('input', { ref: function ref(_ref) {
-	            _this4.emailInput = _ref;
-	          }, type: 'email', placeholder: 'Email' }),
 	        _react2.default.createElement('input', { ref: function ref(_ref2) {
-	            _this4.passwordInput = _ref2;
+	            return _this4.emailInput = _ref2;
+	          }, type: 'email', placeholder: 'Email' }),
+	        _react2.default.createElement('input', { ref: function ref(_ref3) {
+	            return _this4.passwordInput = _ref3;
 	          }, type: 'password', placeholder: 'Password' }),
 	        _react2.default.createElement(
 	          'button',
@@ -20137,6 +20163,35 @@
 	  }
 
 	  _createClass(List, [{
+	    key: 'handleItemCreate',
+	    value: function handleItemCreate(event) {
+	      event.preventDefault();
+
+	      var currencies = ['£', '$', '€'];
+	      var currency = undefined,
+	          amount = undefined;
+
+	      if (currencies.indexOf(this.amountInput.value.substr(0, 1)) > -1) {
+	        currency = this.amountInput.value.substr(0, 1);
+	        amount = this.amountInput.value.substr(1);
+	      } else {
+	        currency = '£';
+	        amount = this.amountInput.value;
+	      }
+
+	      this.props.handleItemCreate({
+	        title: this.titleInput.value,
+	        amount: amount,
+	        currency: currency,
+	        url: this.urlInput.value
+	      });
+
+	      // Clear inputs
+	      this.titleInput.value = '';
+	      this.amountInput.value = '';
+	      this.urlInput.value = '';
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -20163,7 +20218,25 @@
 	            key: itemId,
 	            handleItemDelete: _this2.props.handleItemDelete.bind(_this2, itemId)
 	          }, _this2.props.items[itemId]));
-	        }) : null
+	        }) : null,
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.handleItemCreate.bind(this) },
+	          _react2.default.createElement('input', { ref: function ref(_ref) {
+	              return _this2.titleInput = _ref;
+	            }, type: 'text', placeholder: 'Title' }),
+	          _react2.default.createElement('input', { ref: function ref(_ref2) {
+	              return _this2.amountInput = _ref2;
+	            }, type: 'text', placeholder: 'Amount' }),
+	          _react2.default.createElement('input', { ref: function ref(_ref3) {
+	              return _this2.urlInput = _ref3;
+	            }, type: 'text', placeholder: 'URL' }),
+	          _react2.default.createElement(
+	            'button',
+	            null,
+	            'Create'
+	          )
+	        )
 	      );
 	    }
 	  }]);
