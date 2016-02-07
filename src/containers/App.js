@@ -31,10 +31,24 @@ export default class App extends React.Component {
     });
   }
 
+  handleListCreate(event) {
+    event.preventDefault();
+
+    this.firebase.child('lists').push({
+      title: this.listTitleInput.value
+    });
+
+    this.listTitleInput.value = '';
+  }
+
   handleListDelete(listId) {
     if (window.confirm('All items within this this will be deleted. Do you wish to proceed?')) {
       this.firebase.child(`lists/${listId}`).remove();
     }
+  }
+
+  handleItemCreate(listId, data) {
+    this.firebase.child(`lists/${listId}/items`).push(data);
   }
 
   handleItemDelete(listId, itemId) {
@@ -42,8 +56,6 @@ export default class App extends React.Component {
   }
 
   handleAuth(event) {
-    console.log('handleAuth');
-
     event.preventDefault();
 
     this.firebase.authWithPassword({
@@ -75,15 +87,22 @@ export default class App extends React.Component {
           <List
             key={listId}
             handleListDelete={this.handleListDelete.bind(this, listId)}
+            handleItemCreate={this.handleItemCreate.bind(this, listId)}
             handleItemDelete={this.handleItemDelete.bind(this, listId)}
             {...this.state.lists[listId]}
           />
         ))}
+
+        <section className="list">
+          <form onSubmit={this.handleListCreate.bind(this)}>
+            <input ref={ref => this.listTitleInput = ref} type="text" placeholder="New List" />
+          </form>
+        </section>
       </section>
       :
       <form onSubmit={this.handleAuth.bind(this)}>
-        <input ref={ref => {this.emailInput = ref;}} type="email" placeholder="Email" />
-        <input ref={ref => {this.passwordInput = ref;}} type="password" placeholder="Password" />
+        <input ref={ref => this.emailInput = ref} type="email" placeholder="Email" />
+        <input ref={ref => this.passwordInput = ref} type="password" placeholder="Password" />
         <button>Sign In</button>
       </form>
     );
