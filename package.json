@@ -1,0 +1,28 @@
+{
+  "name": "wishlist",
+  "version": "1.0.0",
+  "description": "A React-fronted and Firebase-backed wishlist.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hturan/wishlist.git"
+  },
+  "author": "Harley Turan (@hturan)",
+  "dependencies": {
+    "firebase": "^2.4.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7"
+  },
+  "devDependencies": {
+    "babel-core": "^6.4.5",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-transform-object-rest-spread": "^6.3.13",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "css-loader": "^0.23.1",
+    "node-sass": "^3.4.2",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.13"
+  }
+}

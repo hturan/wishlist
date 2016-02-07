@@ -9,129 +9,49 @@
   font-weight: 700;
 }
 
-* {
+body {
+  font-family: AtlasTypewriter;
+  font-size: 14px;
+  line-height: 20px;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: AtlasTypewriter;
-  font-size: 14px;
-}
-
-ul {
-  list-style: none;
-}
-
-input {
-  font-family: AtlasTypewriter;
-  font-size: inherit;
-  border: none;
-  outline: none;
-}
-
-input[type="submit"] {
-  visibility: hidden;
-  width: 0;
-  height: 0;
-  position: absolute;
-}
-
-section#app {
-  height: 100%;
-  position: relative;
-}
-
 section.lists {
-  margin: 20px 10px;
-  form.addListForm {
-    margin-top: 10px;
-    input[name="title"] {
-      font-weight: bold;
-      font-size: 18px;
-    }
-  }
+  display: flex;
 }
 
 section.list {
+  min-width: 320px;
+  padding: 10px;
+
   header {
-    padding: 10px 0;
-    input.title {
-      font-weight: bold;
-      font-size: 18px;
-    }
-    a.delete {
-      color: rgb(223, 80, 63);
-      margin: 0 10px;
-      cursor: pointer;
-    }
-  }
-  ul.items {
-    li.item {
-      padding: 10px 0;
-      font-size: 14px;
-      input.name {
-        color: black;
-        text-decoration: none;
-        font-weight: bold;
-        cursor: pointer;
+    &:hover {
+      a.delete-link {
+        display: inline;
       }
-
-      input.name:hover {
-        background: #F7DCED;
-      }
-
-      span.amount {
-        margin: 0 10px;
-      }
-
-      span.url {
-        opacity: 0.7;
-      }
-
-      a.delete {
-        color: rgb(223, 80, 63);
-        cursor: pointer;
-      }
-    }
-  }
-  form.addItemForm {
-    padding: 10px 0;
-    input[name="title"] {
-      font-weight: bold;
-    }
-    input[name="amount"] {
-      width: 70px;
-    }
-    select {
-      -webkit-appearance: none;
-      border: none;
-      font-size: inherit;
-      outline: none;
     }
   }
 }
 
-form.signInForm {
-  position: relative;
-  height: 70px;
-  width: 300px;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  text-align: center;
-  margin: 0 auto;
-  input {
-    width: 100%;
-    text-align: center;
-    margin: 10px 0;
+section.item {
+  padding: 5px 0;
+  &:hover {
+    a.delete-link {
+      display: inline;
+    }
+  }
+  a.item-link {
+    color: black;
+    &:visited {
+      color: gray;
+    }
   }
 }
 
-section.userPanel {
-  margin-bottom: 10px;
-  a {
-    color: rgb(223, 80, 63);
-    cursor: pointer;
-    margin-left: 10px;
-  }
+a.delete-link {
+  display: none;
+  color: red;
+  cursor: pointer;
+  margin-left: 10px;
 }

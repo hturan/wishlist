@@ -3,7 +3,10 @@ A React-fronted and Firebase-backed wishlist.
 
 ![](http://i.imgur.com/l4YtEAJ.png)
 
-> NOTE: This project is mostly a sandbox for playing with React features and ideas. Whilst it works, it should by no means be used as an example of a well-factored React app. If you want to get this up and running, change the `firebaseEndpoint` global to point at your personal Firebase.
+### Data Storage
+We use Firebase as the single app state atom. The main `App` component is connected to Firebase and mirrors changes to the component's state. We then pass data down as `props` to child components for rendering.
+
+Why not use [`re-base`](https://github.com/tylermcginnis/re-base)? It's over-complicated for our needs. Updating a component's store on Firebase changes is a single line of code, and Firebase's library is simple enough to use directly for our needs.
 
 ### Data Structure
 Data is stored in Firebase in the following format:
@@ -63,16 +66,8 @@ At some point in the not-so-distant future, I’d like to de-normalize the data 
 ```
 
 ### To Do
-✔ ~~Editable items~~
-
-✘ Actually usable editable items
-
-✘ Sorting
-
-✔ ~~Domain visualisation (hostname, favicons)~~
-
-✘ Project refactor (separate components, remove jQuery, etc)
-
-✘ Firebase de-normalization
-
-✘ Build tools (SASS, remove JSXTransformer)
+- [ ] `npm` build/serve scripts
+- [ ] Editable items
+- [ ] Sorting
+- [ ] Domain visualisation (hostname, favicons)
+- [ ] Firebase de-normalization
