@@ -17,41 +17,67 @@ body {
   padding: 0;
 }
 
-section.lists {
-  display: flex;
-}
-
 section.list {
-  min-width: 320px;
-  padding: 10px;
-
+  padding: 15px 0;
   header {
+    padding: 0 30px;
     &:hover {
       a.delete-link {
         display: inline;
       }
     }
   }
+  form {
+    padding: 0 30px;
+  }
 }
 
 section.item {
-  padding: 5px 0;
+  position: relative;
+  padding: 5px 30px;
+  &:before {
+    content: '............................................................................................................................................................................';
+    display: block;
+    position: absolute;
+    bottom: 5px;
+    left: 30px;
+    right: 30px;
+    overflow: hidden;
+  }
   &:hover {
     a.delete-link {
-      display: inline;
+      display: block;
     }
   }
   a.item-link {
     color: black;
+    padding-right: 7px;
     &:visited {
       color: gray;
     }
   }
+  span.item-title {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  span.item-price, a.item-link {
+    position: relative;
+    z-index: 1;
+    background-color: white;
+  }
+  span.item-price {
+    text-align: right;
+    float: right;
+    padding-left: 7px;
+  }
 }
 
 a.delete-link {
+  position: absolute;
+  top: 5px;
+  left: 11px;
   display: none;
   color: red;
   cursor: pointer;
-  margin-left: 10px;
 }
