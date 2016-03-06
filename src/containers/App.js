@@ -1,5 +1,6 @@
 import React from 'react';
 import Firebase from 'firebase';
+import 'whatwg-fetch';
 
 import List from '../components/List';
 
@@ -22,9 +23,9 @@ export default class App extends React.Component {
   }
 
   connectFirebase() {
-    console.log('Authenticated as', this.state.auth.password.email);
     this.firebase = this.firebase.child(`users/${this.state.auth.uid}/`);
     this.firebase.on('value', snapshot => {
+      console.log('Authenticated as', this.state.auth.password.email);
       this.setState(snapshot.val());
     }, error => {
       console.warn(error);
