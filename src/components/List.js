@@ -51,8 +51,7 @@ export default class List extends React.Component {
         }
 
         <form onSubmit={this.handleItemCreate.bind(this)}>
-          <input ref={ref => this.urlInput = ref} type="text" placeholder="URL" />
-          <button>Create</button>
+          <input ref={ref => this.urlInput = ref} type="text" placeholder="Item URL" />
         </form>
       </section>
     );
