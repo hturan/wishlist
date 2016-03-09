@@ -30,6 +30,17 @@ export default class List extends React.Component {
     this.urlInput.value = '';
   }
 
+  handleURLInput(event) {
+    if (event.target.value) {
+      fetch(`http://localhost:3001/details/${window.encodeURIComponent(event.target.value)}`)
+        .then(response => response.json())
+        .then(json => {
+          this.amountInput.value = `${json.currency}${json.amount}`;
+          this.titleInput.value = json.title;
+        })
+    }
+  }
+
   render() {
     return (
       <section className="list">
@@ -52,7 +63,7 @@ export default class List extends React.Component {
         <form onSubmit={this.handleItemCreate.bind(this)}>
           <input ref={ref => this.titleInput = ref} type="text" placeholder="Title" />
           <input ref={ref => this.amountInput = ref} type="text" placeholder="Amount" />
-          <input ref={ref => this.urlInput = ref} type="text" placeholder="URL" />
+          <input onInput={this.handleURLInput.bind(this)} ref={ref => this.urlInput = ref} type="text" placeholder="URL" />
           <button>Create</button>
         </form>
       </section>
