@@ -25,7 +25,6 @@ export default class App extends React.Component {
   connectFirebase() {
     this.firebase = this.firebase.child(`users/${this.state.auth.uid}/`);
     this.firebase.on('value', snapshot => {
-      console.log('Authenticated as', this.state.auth.password.email);
       this.setState(snapshot.val());
     }, error => {
       console.warn(error);

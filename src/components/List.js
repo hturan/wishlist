@@ -6,38 +6,28 @@ export default class List extends React.Component {
   handleItemCreate(event) {
     event.preventDefault();
 
-    const currencies = ['£', '$', '€'];
-    let currency, amount;
+    const url = this.urlInput.value;
+    if (url) {
+      fetch(`https://hturan-wishlist.herokuapp.com/details/${window.encodeURIComponent(url)}`)
+        .then(response => {
+          if (response.ok) {
+            return response;
+          }
 
-    if (currencies.indexOf(this.amountInput.value.substr(0, 1)) > -1) {
-      currency = this.amountInput.value.substr(0, 1);
-      amount = this.amountInput.value.substr(1);
-    } else {
-      currency = '£';
-      amount = this.amountInput.value;
-    }
-
-    this.props.handleItemCreate({
-      title: this.titleInput.value,
-      amount,
-      currency,
-      url: this.urlInput.value
-    });
-
-    // Clear inputs
-    this.titleInput.value = '';
-    this.amountInput.value = '';
-    this.urlInput.value = '';
-  }
-
-  handleURLInput(event) {
-    if (event.target.value) {
-      fetch(`http://localhost:3001/details/${window.encodeURIComponent(event.target.value)}`)
+          throw new Error(response.statusText)
+        })
+        .catch(error => console.log(`API Error for ${url}`, error))
         .then(response => response.json())
         .then(json => {
-          this.amountInput.value = `${json.currency}${json.amount}`;
-          this.titleInput.value = json.title;
-        })
+          const { amount, currency, title } = json;
+          this.props.handleItemCreate({
+            title,
+            amount,
+            currency,
+            url
+          });
+          this.urlInput.value = '';
+        });
     }
   }
 
@@ -61,9 +51,7 @@ export default class List extends React.Component {
         }
 
         <form onSubmit={this.handleItemCreate.bind(this)}>
-          <input ref={ref => this.titleInput = ref} type="text" placeholder="Title" />
-          <input ref={ref => this.amountInput = ref} type="text" placeholder="Amount" />
-          <input onInput={this.handleURLInput.bind(this)} ref={ref => this.urlInput = ref} type="text" placeholder="URL" />
+          <input ref={ref => this.urlInput = ref} type="text" placeholder="URL" />
           <button>Create</button>
         </form>
       </section>
