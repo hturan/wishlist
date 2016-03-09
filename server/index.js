@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
+app.set('port', (process.env.PORT || 30001));
 app.use(cors());
 
 const priceFormatRe = /((?:R?\$|USD|\&pound\;|£|¥|€|\&\#163\;|\&\#xa3\;|\u00A3|\&yen\;|\uFFE5|\&\#165\;|\&\#xa5\;|\u00A5|eur|\&\#8364\;|\&\#x20ac\;)\s*\d[0-9\,\.]*)/gi;
@@ -52,4 +53,4 @@ app.get('/details/:url', (req, res) => {
   });
 });
 
-app.listen(3001);
+app.listen(app.get('port'));
