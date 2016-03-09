@@ -1,13 +1,11 @@
 import React from 'react';
 
-export default class Item extends React.Component {
-  render() {
-    return (
-      <section className="item">
-        <span className="item-price">{this.props.currency}{ this.props.amount.toString().indexOf('.') > -1 ? this.props.amount : `${this.props.amount}.00` }</span>
-        <span className="item-title"><a className="item-link" href={this.props.url} target="_blank">{this.props.title}</a></span>
-        <a className="delete-link" onClick={this.props.handleItemDelete}>✖</a>
-      </section>
-    );
-  }
-}
+const Item = props => (
+  <section className="item">
+    <span className="item-price">{props.currency}{props.amount.toString().indexOf('.') > -1 ? props.amount : `${props.amount}.00` }</span>
+    <span className="item-title"><a className="item-link" href={props.url} target="_blank">{props.title}</a></span>
+    <a className="delete-link" onClick={props.handleItemDelete}>✖</a>
+  </section>
+);
+
+export default Item;

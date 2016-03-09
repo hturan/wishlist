@@ -18,24 +18,34 @@ body {
 }
 
 section.list {
-  padding: 15px 30px;
-  @media (max-width: 800px) {
-    padding: 15px 10px;
-  }
+  margin-top: 10px;
   header {
     position: relative;
+    padding: 5px 30px;
+    @media (max-width: 800px) {
+      padding: 5px 10px;
+    }
     &:hover {
       a.delete-link {
         display: block;
-        top: 0;
       }
+    }
+  }
+
+  form {
+    padding: 15px 30px;
+    @media (max-width: 800px) {
+      padding: 15px 10px;
     }
   }
 }
 
 section.item {
   position: relative;
-  padding: 5px 0;
+  padding: 5px 30px;
+  @media (max-width: 800px) {
+    padding: 5px 10px;
+  }
   &:before {
     content: '............................................................................................................................................................................';
     display: block;
@@ -77,7 +87,7 @@ section.item {
 a.delete-link {
   position: absolute;
   top: 5px;
-  left: -20px;
+  left: 10px;
   display: none;
   color: red;
   cursor: pointer;

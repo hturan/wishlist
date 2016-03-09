@@ -10,8 +10,8 @@
   "author": "Harley Turan (@hturan)",
   "dependencies": {
     "firebase": "^2.4.0",
-    "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react": "^15.0.0-rc.1",
+    "react-dom": "^15.0.0-rc.1"
   },
   "devDependencies": {
     "babel-core": "^6.4.5",
