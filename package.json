@@ -10,7 +10,7 @@
   "author": "Harley Turan (@hturan)",
   "scripts": {
     "serve": "webpack-dev-server --content-base dist --port 8081",
-    "deploy-client": "webpack && git checkout gh-pages && mv ./dist/bundle.js ./ && git add bundle.js && git commit -m 'Updated build' && git push && git checkout master",
+    "deploy-client": "git checkout master && git pull && webpack && git checkout gh-pages && mv ./dist/bundle.js ./ && git add bundle.js && git commit -m 'Updated build' && git push && git checkout master",
     "deploy-server": "git subtree push --prefix server heroku master"
   },
   "dependencies": {
