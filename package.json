@@ -8,6 +8,11 @@
     "url": "git+https://github.com/hturan/wishlist.git"
   },
   "author": "Harley Turan (@hturan)",
+  "scripts": {
+    "serve": "webpack-dev-server --content-base dist --port 8081",
+    "deploy-client": "webpack && git checkout gh-pages && mv ./dist/bundle.js ./ && git add bundle.js && git commit -m 'Updated build' && git push",
+    "deploy-server": "git subtree push --prefix server heroku master"
+  },
   "dependencies": {
     "firebase": "^2.4.0",
     "react": "^15.0.0-rc.1",
