@@ -40,13 +40,18 @@ export default class List extends React.Component {
         </header>
 
         {this.props.items ?
-        Object.keys(this.props.items).map(itemId => (
-          <Item
-            key={itemId}
-            handleItemDelete={this.props.handleItemDelete.bind(this, itemId)}
-            {...this.props.items[itemId]}
-          />
-        ))
+        <ul className="items">
+          {
+            Object.keys(this.props.items).map(itemId => (
+            <Item
+              key={itemId}
+              handleItemUpdate={this.props.handleItemUpdate.bind(this, itemId)}
+              handleItemDelete={this.props.handleItemDelete.bind(this, itemId)}
+              {...this.props.items[itemId]}
+            />
+            ))
+          }
+        </ul>
         : null
         }
 

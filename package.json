@@ -14,6 +14,7 @@
     "deploy-server": "git subtree push --prefix server heroku master"
   },
   "dependencies": {
+    "classnames": "^2.2.3",
     "firebase": "^2.4.0",
     "react": "^15.0.0-rc.1",
     "react-dom": "^15.0.0-rc.1",

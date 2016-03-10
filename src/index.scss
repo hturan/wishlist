@@ -38,6 +38,12 @@ section.list {
     }
   }
 
+  ul.items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   form {
     padding: 5px 30px;
     @media (max-width: 800px) {
@@ -57,7 +63,8 @@ section.list {
   }
 }
 
-section.item {
+li.item {
+  display: block;
   position: relative;
   padding: 6px 30px;
   @media (max-width: 800px) {
@@ -74,20 +81,42 @@ section.item {
     opacity: 0.3;
   }
   &:hover {
-    a.delete-link {
+    a.delete-link, a.edit-link {
       display: block;
     }
   }
-  a.item-link {
-    color: black;
-    padding-right: 7px;
-    text-decoration: none;
+  &.editing {
+    &:before {
+      color: red;
+      opacity: 1;
+    }
   }
   span.item-title {
     display: block;
     overflow: hidden;
     white-space: nowrap;
+
+    a.item-link {
+      color: black;
+      padding-right: 7px;
+      text-decoration: none;
+    }
   }
+
+  span.item-title, span.item-price {
+    input {
+      position: relative;
+      z-index: 1;
+      font: inherit;
+      background-color: red;
+      color: white;
+      border: none;
+      margin: 0;
+      padding: 0;
+      outline: none;
+    }
+  }
+
   span.item-price, a.item-link {
     position: relative;
     z-index: 1;
@@ -97,6 +126,18 @@ section.item {
     text-align: right;
     float: right;
     padding-left: 7px;
+    input {
+      text-align: right;
+    }
+  }
+  a.edit-link {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    display: none;
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.3;
   }
 }
 

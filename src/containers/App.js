@@ -51,6 +51,10 @@ export default class App extends React.Component {
     this.firebase.child(`lists/${listId}/items`).push(data);
   }
 
+  handleItemUpdate(listId, itemId, data) {
+    this.firebase.child(`lists/${listId}/items/${itemId}`).update(data);
+  }
+
   handleItemDelete(listId, itemId) {
     this.firebase.child(`lists/${listId}/items/${itemId}`).remove();
   }
@@ -88,6 +92,7 @@ export default class App extends React.Component {
             key={listId}
             handleListDelete={this.handleListDelete.bind(this, listId)}
             handleItemCreate={this.handleItemCreate.bind(this, listId)}
+            handleItemUpdate={this.handleItemUpdate.bind(this, listId)}
             handleItemDelete={this.handleItemDelete.bind(this, listId)}
             {...this.state.lists[listId]}
           />
