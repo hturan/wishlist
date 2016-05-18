@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-app.set('port', (process.env.PORT || 30001));
+
 app.use(cors());
 
 const priceFormatRe = /((?:R?\$|USD|\&pound\;|£|¥|€|\&\#163\;|\&\#xa3\;|\u00A3|\&yen\;|\uFFE5|\&\#165\;|\&\#xa5\;|\u00A5|eur|\&\#8364\;|\&\#x20ac\;)\s*\d[0-9\,\.]*)/gi;
@@ -14,14 +14,18 @@ function parsePriceFromBody(text) {
   - Strip spaces
   - Match currencies
   - TODO: Strip 0 values
-  - TODO: Weight by styles (font-size, visibility, line-through)
+  - TODO: Remove hidden elements
+  - TODO: Remove 'line-through' elements
+  - TODO: Weight by styles (font-size, line-through)
   - TODO: Weight by position
   - TODO: Test class/id names
+  - TODO: Account for '35€' formatting
   */
 
-  var prices = text.replace(/\s/g,"").match(priceFormatRe);
+  var prices = text.replace(/\s/g,"").match(priceFormatRe) || [];
+  prices = prices.filter(price => /[1-9]/.test(price));
 
-  if (prices) {
+  if (prices.length > 0) {
     return {
       amount: prices[0].substr(1),
       currency: prices[0].substr(0, 1)
@@ -53,4 +57,4 @@ app.get('/details/:url', (req, res) => {
   });
 });
 
-app.listen(app.get('port'));
+app.listen(process.env.PORT || 3001);
