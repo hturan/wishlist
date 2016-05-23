@@ -8,7 +8,7 @@ export default class List extends React.Component {
 
     const url = this.urlInput.value;
     if (url) {
-      fetch(`https://hturan-wishlist.herokuapp.com/details/${window.encodeURIComponent(url)}`)
+      fetch(`/details/${window.encodeURIComponent(url)}`)
         .then(response => {
           if (response.ok) {
             return response;
@@ -42,12 +42,11 @@ export default class List extends React.Component {
         {this.props.items ?
         <ul className="items">
           {
-            Object.keys(this.props.items).map(itemId => (
+            this.props.items.map((item, index) => (
             <Item
-              key={itemId}
-              handleItemUpdate={this.props.handleItemUpdate.bind(this, itemId)}
-              handleItemDelete={this.props.handleItemDelete.bind(this, itemId)}
-              {...this.props.items[itemId]}
+              handleItemUpdate={this.props.handleItemUpdate.bind(this, index)}
+              handleItemDelete={this.props.handleItemDelete.bind(this, index)}
+              {...item}
             />
             ))
           }

@@ -1,5 +1,4 @@
 import React from 'react';
-import Firebase from 'firebase';
 import 'whatwg-fetch';
 
 import List from '../components/List';
@@ -10,31 +9,23 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.firebase = new Firebase('https://wishlist-hturan.firebaseio.com/');
+    this.horizon = Horizon();
+
+    this.horizon('lists').watch().subscribe(items => this.setState({
+      lists: items
+    }));
+
+    this.horizon.status(message => console.log(message));
 
     this.state = {
-      lists: {},
-      auth: this.firebase.getAuth()
+      lists: []
     };
-
-    if (this.state.auth) {
-      this.connectFirebase();
-    }
-  }
-
-  connectFirebase() {
-    this.firebase = this.firebase.child(`users/${this.state.auth.uid}/`);
-    this.firebase.on('value', snapshot => {
-      this.setState(snapshot.val());
-    }, error => {
-      console.warn(error);
-    });
   }
 
   handleListCreate(event) {
     event.preventDefault();
 
-    this.firebase.child('lists').push({
+    this.horizon('lists').store({
       title: this.listTitleInput.value
     });
 
@@ -43,58 +34,55 @@ export default class App extends React.Component {
 
   handleListDelete(listId) {
     if (window.confirm('All items within this this will be deleted. Do you wish to proceed?')) {
-      this.firebase.child(`lists/${listId}`).remove();
+      this.horizon('lists').remove(listId);
     }
   }
 
   handleItemCreate(listId, data) {
-    this.firebase.child(`lists/${listId}/items`).push(data);
-  }
-
-  handleItemUpdate(listId, itemId, data) {
-    this.firebase.child(`lists/${listId}/items/${itemId}`).update(data);
-  }
-
-  handleItemDelete(listId, itemId) {
-    this.firebase.child(`lists/${listId}/items/${itemId}`).remove();
-  }
-
-  handleAuth(event) {
-    event.preventDefault();
-
-    this.firebase.authWithPassword({
-      email: this.emailInput.value,
-      password: this.passwordInput.value
-    }, error => {
-      if (!error) {
-        this.setState({
-          auth: this.firebase.getAuth()
-        }, () => {
-          // setState might not be synchronous, so let's configure Firebase when ready
-          this.connectFirebase();
-        });
-      } else {
-        console.warn(error);
-      }
+    const list = this.state.lists.filter(list => list.id === listId)[0];
+    this.horizon('lists').replace({
+      ...list,
+      items: list.items ? list.items.concat([data]) : [data]
     });
   }
 
-  handleUnauth() {
-    this.firebase.unauth();
+  handleItemUpdate(listId, itemIndex, data) {
+    const list = this.state.lists.filter(list => list.id === listId)[0];
+    this.horizon('lists').replace({
+      ...list,
+      items: [
+        ...list.items.slice(0, itemIndex),
+        {
+          ...list.items[itemIndex],
+          ...data
+        },
+        ...list.items.slice(itemIndex + 1)
+      ]
+    });
+  }
+
+  handleItemDelete(listId, itemIndex) {
+    const list = this.state.lists.filter(list => list.id === listId)[0];
+    this.horizon('lists').replace({
+      ...list,
+      items: [
+        ...list.items.slice(0, itemIndex),
+        ...list.items.slice(itemIndex + 1)
+      ]
+    });
   }
 
   render() {
     return (
-      this.state.auth ?
       <section className="lists">
-        {Object.keys(this.state.lists).map(listId => (
+        {this.state.lists.map(list => (
           <List
-            key={listId}
-            handleListDelete={this.handleListDelete.bind(this, listId)}
-            handleItemCreate={this.handleItemCreate.bind(this, listId)}
-            handleItemUpdate={this.handleItemUpdate.bind(this, listId)}
-            handleItemDelete={this.handleItemDelete.bind(this, listId)}
-            {...this.state.lists[listId]}
+            key={list.id}
+            handleListDelete={this.handleListDelete.bind(this, list.id)}
+            handleItemCreate={this.handleItemCreate.bind(this, list.id)}
+            handleItemUpdate={this.handleItemUpdate.bind(this, list.id)}
+            handleItemDelete={this.handleItemDelete.bind(this, list.id)}
+            {...list}
           />
         ))}
 
@@ -104,12 +92,6 @@ export default class App extends React.Component {
           </form>
         </section>
       </section>
-      :
-      <form onSubmit={this.handleAuth.bind(this)}>
-        <input ref={ref => this.emailInput = ref} type="email" placeholder="Email" />
-        <input ref={ref => this.passwordInput = ref} type="password" placeholder="Password" />
-        <button>Sign In</button>
-      </form>
     );
   }
 }

@@ -1,2 +1,9 @@
+# Node & NPM
 node_modules
 npm-debug.log
+
+# RethinkDB
+rethinkdb_data
+
+# Project
+dist
