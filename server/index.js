@@ -62,7 +62,9 @@ function parsePriceFromBody(text) {
 app.get('/details/:url', (req, res) => {
   const url = req.params.url;
 
+  console.time(`Fetching ${req.params.url}`);
   request(url, (error, response, body) => {
+    console.timeEnd(`Fetching ${req.params.url}`);
     if (!error && response.statusCode == 200) {
       var $ = cheerio.load(body);
       var priceData = parsePriceFromBody($('body').text());
@@ -88,7 +90,7 @@ horizon(httpServer, {
   rdb_host: 'localhost',
   rdb_port: 28015,
   auth: {
-    allow_anonymous: true,
+    allow_anonymous: false,
     allow_unauthenticated: true,
     token_secret: 'secret'
   }

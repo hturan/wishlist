@@ -14,7 +14,8 @@
     "deploy-server": "git subtree push --prefix server heroku master"
   },
   "dependencies": {
-    "@horizon/server": "^1.0.2",
+    "@horizon/server": "^1.0.3",
+    "accounting": "^0.4.1",
     "classnames": "^2.2.3",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",

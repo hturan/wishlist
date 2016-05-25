@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import accounting from 'accounting';
 
 export default class Item extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class Item extends React.Component {
   }
 
   formatAmount() {
-    return `${this.props.currency}${this.props.amount.toString().indexOf('.') > -1 ? this.props.amount : this.props.amount+'.00'}`;
+    return accounting.formatMoney(this.props.amount, this.props.currency);
   }
 
   unformatAmount(amountString) {
