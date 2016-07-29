@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { getSymbolFromCurrency, getCurrencyFromSymbol } from 'currency-symbol-map';
 
 export default class Item extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class Item extends React.Component {
   }
 
   formatAmount() {
-    return `${this.props.currency}${this.props.amount.toString().indexOf('.') > -1 ? this.props.amount : this.props.amount+'.00'}`;
+    return `${getSymbolFromCurrency(this.props.currency)}${(this.props.amount / 100).toFixed(2)}`;
   }
 
   unformatAmount(amountString) {
@@ -44,8 +45,8 @@ export default class Item extends React.Component {
     }
 
     return {
-      currency,
-      amount
+      currency: getCurrencyFromSymbol(currency),
+      amount: parseInt(amount.replace('.', '').replace(',', ''), 10)
     };
   }
 

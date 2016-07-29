@@ -13,13 +13,13 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel',
         query: {
-          plugins: ["transform-object-rest-spread"],
+          plugins: ['transform-object-rest-spread'],
           presets: ['react', 'es2015']
         }
       },
       {
         test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
+        loaders: ['style', 'css', 'sass']
       }
     ]
   }

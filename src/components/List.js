@@ -8,7 +8,7 @@ export default class List extends React.Component {
 
     const url = this.urlInput.value;
     if (url) {
-      fetch(`https://hturan-wishlist.herokuapp.com/details/${window.encodeURIComponent(url)}`)
+      fetch(`https://ezemflzd08.execute-api.eu-west-1.amazonaws.com/dev/details?url=${encodeURIComponent(url)}`)
         .then(response => {
           if (response.ok) {
             return response;
