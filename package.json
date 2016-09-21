@@ -16,7 +16,7 @@
   "dependencies": {
     "classnames": "^2.2.3",
     "currency-symbol-map": "^3.0.0",
-    "firebase": "^2.4.0",
+    "firebase": "^3.3.2",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "whatwg-fetch": "^0.11.0"

@@ -10,25 +10,44 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.firebase = new Firebase('https://wishlist-hturan.firebaseio.com/');
+    firebase.initializeApp({
+      apiKey: 'AIzaSyDaA4bP4YIaPR7fnDTVg1EQbfMSMbmpGDE',
+      authDomain: ' wishlist-hturan.firebaseapp.com',
+      databaseURL: 'https://wishlist-hturan.firebaseio.com'
+    });
 
     this.state = {
-      lists: {},
-      auth: this.firebase.getAuth()
+      loading: true,
+      user: null,
+      lists: {}
     };
 
-    if (this.state.auth) {
-      this.connectFirebase();
-    }
+    this.firebase = null;
   }
 
-  connectFirebase() {
-    this.firebase = this.firebase.child(`users/${this.state.auth.uid}/`);
-    this.firebase.on('value', snapshot => {
-      this.setState(snapshot.val());
-    }, error => {
-      console.warn(error);
-    });
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // Authenticated
+        this.setState({
+          user
+        });
+        this.firebase = firebase.database().ref(`users/${user.uid}/`);
+        this.firebase.on('value', snapshot => {
+          this.setState({
+            lists: snapshot.val().lists,
+            loading: false
+          })
+        });
+      } else {
+        // Unauthenticated
+        this.setState({
+          user: null,
+          loading: false
+        });
+        this.firebase = null;
+      }
+    })
   }
 
   handleListCreate(event) {
@@ -62,30 +81,20 @@ export default class App extends React.Component {
   handleAuth(event) {
     event.preventDefault();
 
-    this.firebase.authWithPassword({
-      email: this.emailInput.value,
-      password: this.passwordInput.value
-    }, error => {
-      if (!error) {
-        this.setState({
-          auth: this.firebase.getAuth()
-        }, () => {
-          // setState might not be synchronous, so let's configure Firebase when ready
-          this.connectFirebase();
-        });
-      } else {
-        console.warn(error);
-      }
+    firebase.auth().signInWithEmailAndPassword(this.emailInput.value, this.passwordInput.value).catch(err => {
+      alert(err.message);
     });
   }
 
   handleUnauth() {
-    this.firebase.unauth();
+    firebase.auth().signOut();
   }
 
   render() {
+    if (this.state.loading) return null;
+
     return (
-      this.state.auth ?
+      this.state.user ?
       <section className="lists">
         {Object.keys(this.state.lists).map(listId => (
           <List
@@ -100,15 +109,14 @@ export default class App extends React.Component {
 
         <section className="list">
           <form onSubmit={this.handleListCreate.bind(this)}>
-            <input ref={ref => this.listTitleInput = ref} type="text" placeholder="New List" />
+            <input ref={ref => {this.listTitleInput = ref}} type="text" placeholder="New List" />
           </form>
         </section>
       </section>
       :
-      <form onSubmit={this.handleAuth.bind(this)}>
-        <input ref={ref => this.emailInput = ref} type="email" placeholder="Email" />
-        <input ref={ref => this.passwordInput = ref} type="password" placeholder="Password" />
-        <button>Sign In</button>
+      <form id="sign-in-form" onSubmit={this.handleAuth.bind(this)}>
+        <input ref={ref => {this.emailInput = ref}} type="email" placeholder="Email" />
+        <input ref={ref => {this.passwordInput = ref}} type="password" placeholder="Password" />
       </form>
     );
   }

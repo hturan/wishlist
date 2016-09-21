@@ -9,12 +9,48 @@
   font-weight: 700;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: AtlasTypewriter;
   font-size: 14px;
   line-height: 20px;
   margin: 0;
   padding: 0;
+}
+
+section#app {
+  height: 100%;
+}
+
+form#sign-in-form {
+  position: relative;
+  top: 50%;
+  text-align: center;
+  width: 300px;
+  margin: 0 auto;
+  margin-top: -40px;
+  input {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    border: none;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    outline: none;
+    &::-webkit-input-placeholder {
+      color: rgba(0,0,0,0.6);
+    }
+    &:first-child {
+      border-bottom: 2px solid rgba(0,0,0,0.05);
+    }
+  }
 }
 
 section.lists {
