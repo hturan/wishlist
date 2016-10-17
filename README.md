@@ -66,8 +66,8 @@ At some point in the not-so-distant future, I’d like to de-normalize the data 
 ```
 
 ### To Do
-- [ ] `npm` build/serve scripts
-- [ ] Editable items
+- [x] `npm` build/serve scripts
+- [x] Editable items
 - [ ] Sorting
 - [ ] Domain visualisation (hostname, favicons)
 - [ ] Firebase de-normalization
