@@ -1,5 +1,5 @@
 import React from 'react';
-import Firebase from 'firebase';
+import firebase from 'firebase';
 import 'whatwg-fetch';
 
 import List from '../components/List';
@@ -81,7 +81,15 @@ export default class App extends React.Component {
   handleAuth(event) {
     event.preventDefault();
 
+    this.setState({
+      loading: true
+    });
+
     firebase.auth().signInWithEmailAndPassword(this.emailInput.value, this.passwordInput.value).catch(err => {
+      this.setState({
+        loading: false
+      });
+
       alert(err.message);
     });
   }
@@ -91,7 +99,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    if (this.state.loading) return null;
+    if (this.state.loading) return <section className="loader" />;
 
     return (
       this.state.user ?
@@ -117,6 +125,7 @@ export default class App extends React.Component {
       <form id="sign-in-form" onSubmit={this.handleAuth.bind(this)}>
         <input ref={ref => {this.emailInput = ref}} type="email" placeholder="Email" />
         <input ref={ref => {this.passwordInput = ref}} type="password" placeholder="Password" />
+        <button className="submit">Sign In</button>
       </form>
     );
   }
