@@ -8,27 +8,31 @@ export default class List extends React.Component {
 
     const url = this.urlInput.value;
     if (url) {
-      fetch(`https://ezemflzd08.execute-api.eu-west-1.amazonaws.com/dev/details?url=${encodeURIComponent(url)}`)
-        .then(response => {
-          if (response.ok) {
-            return response;
-          }
+      fetch(`https://us-central1-wishlist-hturan.cloudfunctions.net/details?url=${encodeURIComponent(url)}`)
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
 
-          throw new Error(response.statusText)
-        })
-        .catch(error => console.log(`API Error for ${url}`, error))
-        .then(response => response.json())
-        .then(json => {
-          const { amount, currency, title } = json;
-          this.props.handleItemCreate({
-            title,
-            amount,
-            currency,
-            url
-          });
-          this.urlInput.value = '';
+        throw new Error(response.statusText)
+      })
+      .catch(error => console.log(`API Error for ${url}`, error))
+      .then(response => response.json())
+      .then(json => {
+        const { amount, currency, title } = json;
+        this.props.handleItemCreate({
+          title,
+          amount,
+          currency,
+          url
         });
+        this.urlInput.value = '';
+      });
     }
+  }
+
+  handeUpdatePrices() {
+    fetch(`https://us-central1-wishlist-hturan.cloudfunctions.net/updatePrices?userId=2&listId=${this.props.id}`);
   }
 
   render() {
@@ -37,6 +41,7 @@ export default class List extends React.Component {
         <header>
           <strong>{this.props.title}</strong>
           <a className="delete-link" onClick={this.props.handleListDelete}>✖</a>
+          <a className="update-link" onClick={this.handeUpdatePrices.bind(this)}>Update</a>
         </header>
 
         {this.props.items ?

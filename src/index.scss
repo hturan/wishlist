@@ -95,6 +95,10 @@ section.lists {
 
 section.list {
   margin-top: 15px;
+  &:last-child {
+    padding-bottom: 15px;
+  }
+
   header {
     position: relative;
     padding: 5px 30px;
@@ -112,6 +116,11 @@ section.list {
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  a.update-link {
+    cursor: pointer;
+    float: right;
   }
 
   form {
@@ -159,6 +168,12 @@ li.item {
     &:before {
       color: red;
       opacity: 1;
+    }
+  }
+  &.updating {
+    span.item-price {
+      color: rgba(0,0,0,0.3);
+      text-decoration: line-through;
     }
   }
   span.item-title {

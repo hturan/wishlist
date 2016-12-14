@@ -107,6 +107,7 @@ export default class App extends React.Component {
         {Object.keys(this.state.lists).map(listId => (
           <List
             key={listId}
+            id={listId}
             handleListDelete={this.handleListDelete.bind(this, listId)}
             handleItemCreate={this.handleItemCreate.bind(this, listId)}
             handleItemUpdate={this.handleItemUpdate.bind(this, listId)}

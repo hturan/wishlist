@@ -44,6 +44,10 @@ export default class Item extends React.Component {
       amount = amountString;
     }
 
+    if (amount.indexOf('.') === -1) {
+      amount = `${amount}00`;
+    }
+
     return {
       currency: getCurrencyFromSymbol(currency),
       amount: parseInt(amount.replace('.', '').replace(',', ''), 10)
@@ -52,7 +56,7 @@ export default class Item extends React.Component {
 
   render() {
     return (
-      <li className={classNames('item', {'editing': this.state.editing})}>
+      <li className={classNames('item', {'editing': this.state.editing, 'updating': this.props.updating})}>
         <span className="item-price">
           {this.state.editing ?
           <input
