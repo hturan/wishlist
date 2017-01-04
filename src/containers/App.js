@@ -19,7 +19,8 @@ export default class App extends React.Component {
     this.state = {
       loading: true,
       user: null,
-      lists: {}
+      lists: {},
+      groupByHostname: false
     };
 
     this.firebase = null;
@@ -57,6 +58,25 @@ export default class App extends React.Component {
         this.firebase = null;
       }
     });
+  }
+
+  getItemsByHostname() {
+    const itemsByHostname = {};
+    const element = document.createElement('a');
+
+    Object.keys(this.state.lists).forEach((listId) => {
+      const list = this.state.lists[listId];
+      Object.keys(list.items).forEach((itemId) => {
+        const item = list.items[itemId];
+
+        element.href = item.url;
+
+        itemsByHostname[element.hostname] = itemsByHostname[element.hostname] || { title: element.hostname, items: {} };
+        itemsByHostname[element.hostname].items[itemId] = item;
+      });
+    });
+
+    return itemsByHostname;
   }
 
   handleListCreate(event) {
@@ -107,13 +127,22 @@ export default class App extends React.Component {
     firebase.auth().signOut();
   }
 
+  handleToggleListDisplay() {
+    this.setState({
+      groupByHostname: !this.state.groupByHostname
+    });
+  }
+
   render() {
     if (this.state.loading) return <section className="loader" />;
+
+    const lists = this.state.groupByHostname ? this.getItemsByHostname() : this.state.lists;
 
     return (
       this.state.user ?
         <section className="lists">
-          {Object.keys(this.state.lists).map(listId => (
+          <a onClick={this.handleToggleListDisplay}>Toggle</a>
+          {Object.keys(lists).map(listId => (
             <List
               key={listId}
               id={listId}
@@ -121,7 +150,7 @@ export default class App extends React.Component {
               handleItemCreate={this.handleItemCreate}
               handleItemUpdate={this.handleItemUpdate}
               handleItemDelete={this.handleItemDelete}
-              {...this.state.lists[listId]}
+              {...lists[listId]}
             />
           ))}
 
