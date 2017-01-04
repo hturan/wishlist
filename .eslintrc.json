@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "comma-dangle": "off",
+    "react/jsx-filename-extension": "off",
+    "max-len": "off",
+    "react/jsx-no-target-blank": "off",
+    "class-methods-use-this": "off",
+    "block-spacing": "off",
+    "no-return-assign": "off",
+    "jsx-a11y/no-static-element-interactions": "off"
+  },
+  "env": {
+    "browser": true
+  }
+}
