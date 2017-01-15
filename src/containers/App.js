@@ -19,25 +19,35 @@ export default class App extends React.Component {
     this.state = {
       loading: true,
       user: null,
-      lists: {}
+      lists: {},
+      groupByHostname: false
     };
 
     this.firebase = null;
+
+    this.getItemsByHostname = this.getItemsByHostname.bind(this);
+    this.handleToggleListDisplay = this.handleToggleListDisplay.bind(this);
+    this.handleAuth = this.handleAuth.bind(this);
+    this.handleListCreate = this.handleListCreate.bind(this);
+    this.handleListDelete = this.handleListDelete.bind(this);
+    this.handleItemCreate = this.handleItemCreate.bind(this);
+    this.handleItemUpdate = this.handleItemUpdate.bind(this);
+    this.handleItemDelete = this.handleItemDelete.bind(this);
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // Authenticated
         this.setState({
           user
         });
         this.firebase = firebase.database().ref(`users/${user.uid}/`);
-        this.firebase.on('value', snapshot => {
+        this.firebase.on('value', (snapshot) => {
           this.setState({
             lists: snapshot.val().lists,
             loading: false
-          })
+          });
         });
       } else {
         // Unauthenticated
@@ -47,7 +57,26 @@ export default class App extends React.Component {
         });
         this.firebase = null;
       }
-    })
+    });
+  }
+
+  getItemsByHostname() {
+    const itemsByHostname = {};
+    const element = document.createElement('a');
+
+    Object.keys(this.state.lists).forEach((listId) => {
+      const list = this.state.lists[listId];
+      Object.keys(list.items).forEach((itemId) => {
+        const item = list.items[itemId];
+
+        element.href = item.url;
+
+        itemsByHostname[element.hostname] = itemsByHostname[element.hostname] || { title: element.hostname, items: {} };
+        itemsByHostname[element.hostname].items[itemId] = item;
+      });
+    });
+
+    return itemsByHostname;
   }
 
   handleListCreate(event) {
@@ -85,12 +114,12 @@ export default class App extends React.Component {
       loading: true
     });
 
-    firebase.auth().signInWithEmailAndPassword(this.emailInput.value, this.passwordInput.value).catch(err => {
+    firebase.auth().signInWithEmailAndPassword(this.emailInput.value, this.passwordInput.value).catch((err) => {
       this.setState({
         loading: false
       });
 
-      alert(err.message);
+      window.alert(err.message);
     });
   }
 
@@ -98,36 +127,45 @@ export default class App extends React.Component {
     firebase.auth().signOut();
   }
 
+  handleToggleListDisplay() {
+    this.setState({
+      groupByHostname: !this.state.groupByHostname
+    });
+  }
+
   render() {
     if (this.state.loading) return <section className="loader" />;
 
+    const lists = this.state.groupByHostname ? this.getItemsByHostname() : this.state.lists;
+
     return (
       this.state.user ?
-      <section className="lists">
-        {Object.keys(this.state.lists).map(listId => (
-          <List
-            key={listId}
-            id={listId}
-            handleListDelete={this.handleListDelete.bind(this, listId)}
-            handleItemCreate={this.handleItemCreate.bind(this, listId)}
-            handleItemUpdate={this.handleItemUpdate.bind(this, listId)}
-            handleItemDelete={this.handleItemDelete.bind(this, listId)}
-            {...this.state.lists[listId]}
-          />
-        ))}
+        <section className="lists">
+          <a onClick={this.handleToggleListDisplay}>Toggle</a>
+          {Object.keys(lists).map(listId => (
+            <List
+              key={listId}
+              id={listId}
+              handleListDelete={this.handleListDelete}
+              handleItemCreate={this.handleItemCreate}
+              handleItemUpdate={this.handleItemUpdate}
+              handleItemDelete={this.handleItemDelete}
+              {...lists[listId]}
+            />
+          ))}
 
-        <section className="list">
-          <form onSubmit={this.handleListCreate.bind(this)}>
-            <input ref={ref => {this.listTitleInput = ref}} type="text" placeholder="New List" />
-          </form>
+          <section className="list">
+            <form onSubmit={this.handleListCreate}>
+              <input ref={ref => this.listTitleInput = ref} type="text" placeholder="New List" />
+            </form>
+          </section>
         </section>
-      </section>
       :
-      <form id="sign-in-form" onSubmit={this.handleAuth.bind(this)}>
-        <input ref={ref => {this.emailInput = ref}} type="email" placeholder="Email" />
-        <input ref={ref => {this.passwordInput = ref}} type="password" placeholder="Password" />
-        <button className="submit">Sign In</button>
-      </form>
+        <form id="sign-in-form" onSubmit={this.handleAuth}>
+          <input ref={ref => this.emailInput = ref} type="email" placeholder="Email" />
+          <input ref={ref => this.passwordInput = ref} type="password" placeholder="Password" />
+          <button className="submit">Sign In</button>
+        </form>
     );
   }
 }

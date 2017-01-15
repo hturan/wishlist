@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { getSymbolFromCurrency, getCurrencyFromSymbol } from 'currency-symbol-map';
+
+import { formatAmount, unformatAmount } from '../utils';
 
 export default class Item extends React.Component {
   constructor(props) {
@@ -9,13 +10,21 @@ export default class Item extends React.Component {
     this.state = {
       editing: false
     };
+
+    this.handleInput = this.handleInput.bind(this);
+    this.handleUpdateToggle = this.handleUpdateToggle.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete() {
+    this.props.handleItemDelete(this.props.listId, this.props.id);
   }
 
   handleUpdateToggle() {
     if (this.state.editing) {
-      this.props.handleItemUpdate({
+      this.props.handleItemUpdate(this.props.listId, this.props.id, {
         title: this.titleInput.value,
-        ...this.unformatAmount(this.amountInput.value)
+        ...unformatAmount(this.amountInput.value)
       });
     }
 
@@ -25,67 +34,54 @@ export default class Item extends React.Component {
   }
 
   handleInput(event) {
-    event.target.size = event.target.value.length > 5 ? event.target.value.length : 5;
-  }
-
-  formatAmount() {
-    return `${getSymbolFromCurrency(this.props.currency)}${(this.props.amount / 100).toFixed(2)}`;
-  }
-
-  unformatAmount(amountString) {
-    const currencies = ['£', '$', '€'];
-    let currency, amount;
-
-    if (currencies.indexOf(amountString.substr(0, 1)) > -1) {
-      currency = amountString.substr(0, 1);
-      amount = amountString.substr(1);
-    } else {
-      currency = '£';
-      amount = amountString;
-    }
-
-    if (amount.indexOf('.') === -1) {
-      amount = `${amount}00`;
-    }
-
-    return {
-      currency: getCurrencyFromSymbol(currency),
-      amount: parseInt(amount.replace('.', '').replace(',', ''), 10)
-    };
+    const eventTarget = event.target;
+    eventTarget.size = event.target.value.length > 5 ? event.target.value.length : 5;
   }
 
   render() {
     return (
-      <li className={classNames('item', {'editing': this.state.editing, 'updating': this.props.updating})}>
+      <li className={classNames('item', { editing: this.state.editing, updating: this.props.updating })}>
         <span className="item-price">
           {this.state.editing ?
-          <input
-            type="text"
-            ref={ref => this.amountInput = ref}
-            defaultValue={this.formatAmount()}
-            size={this.formatAmount().length}
-            onInput={this.handleInput.bind(this)}
-          />
+            <input
+              type="text"
+              ref={ref => this.amountInput = ref}
+              defaultValue={formatAmount(this.props.currency, this.props.amount)}
+              size={formatAmount(this.props.currency, this.props.amount).length}
+              onInput={this.handleInput}
+            />
           :
-          <span>{this.formatAmount()}</span>
+            <span>{formatAmount(this.props.currency, this.props.amount)}</span>
           }
         </span>
         <span className="item-title">
           {this.state.editing ?
-          <input
-            type="text"
-            ref={ref => this.titleInput = ref}
-            defaultValue={this.props.title}
-            size={this.props.title.length}
-            onInput={this.handleInput.bind(this)}
-          />
+            <input
+              type="text"
+              ref={ref => this.titleInput = ref}
+              defaultValue={this.props.title}
+              size={this.props.title.length}
+              onInput={this.handleInput}
+            />
           :
-          <a className="item-link" href={this.props.url} target="_blank">{this.props.title}</a>
+            <a className="item-link" href={this.props.url} target="_blank">{this.props.title}</a>
           }
         </span>
-        <a className="delete-link" onClick={this.props.handleItemDelete}>✖</a>
-        <a className="edit-link" onClick={this.handleUpdateToggle.bind(this)}>✎</a>
+        <a className="delete-link" onClick={this.handleDelete}>✖</a>
+        <a className="edit-link" onClick={this.handleUpdateToggle}>✎</a>
       </li>
     );
   }
+}
+
+Item.propTypes = {
+  id: PropTypes.string.isRequired,
+  listId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
+  amount: PropTypes.number.isRequired,
+  updating: PropTypes.bool,
+  handleItemUpdate: PropTypes.func.isRequired,
+  handleItemDelete: PropTypes.func.isRequired
 };
