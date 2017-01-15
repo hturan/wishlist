@@ -9,7 +9,7 @@
   "author": "Harley Turan (@hturan)",
   "scripts": {
     "serve": "webpack-dev-server --content-base dist --port 8081",
-    "lint": "eslint ./src"
+    "lint": "eslint src api"
   },
   "dependencies": {
     "classnames": "^2.2.5",
