@@ -4,7 +4,7 @@ const currencyMapping = require('./currencyMapping');
 // TODO: Create mapping between tld and currency
 // TODO: Make use of 'og:title', 'og:price:amount' and 'og:price:currency', along with 'itemprop' fallbacks
 
-module.exports =  {
+module.exports = {
   'www.amazon.co.uk': {
     price: '#priceblock_saleprice, #priceblock_dealprice, #priceblock_ourprice, #actualPriceValue, #buyNewSection .a-color-price, ul.swatches .our-price',
     title: '#productTitle'

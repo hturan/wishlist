@@ -27,15 +27,17 @@ function formatTitle(node) {
 }
 
 // TODO: Handle regional mis-match. 'GBP' request, but the server's in Ireland, so getting 'EUR' prices. Currency conversion? AWS multi-region?
-exports.handler = (event, context, callback) => {
-  const providedUrl = decodeURIComponent(event.url);
+exports.details = (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+
+  const providedUrl = decodeURIComponent(req.query.url);
 
   if (providedUrl) {
     const hostname = url.parse(providedUrl).hostname;
 
     if (selectorMapping[hostname]) {
       if (typeof selectorMapping[hostname] === 'function') {
-        selectorMapping[hostname](providedUrl, callback);
+        selectorMapping[hostname](providedUrl, res);
       } else {
         fetch(providedUrl)
         .then(response => response.text())
@@ -44,7 +46,7 @@ exports.handler = (event, context, callback) => {
           const priceString = $(selectorMapping[hostname].price).first().text();
           const formattedPriceString = formatPriceString(priceString.trim());
 
-          callback(null, {
+          res.status(200).json({
             currency: formattedPriceString.currency,
             amount: formattedPriceString.amount,
             title: formatTitle($(selectorMapping[hostname].title).first())
@@ -52,11 +54,13 @@ exports.handler = (event, context, callback) => {
         });
       }
     } else {
-      callback(`Selector not found for ${hostname}`);
+      res.status(422).json({
+        error: `Selector not found for ${hostname}`
+      });
     }
   } else {
-    callback('Invalid URL specified');
+    res.status(422).json({
+      error: 'Invalid URL specified'
+    });
   }
 };
-
-// exports.handler({url: process.argv[2]}, null, (error, success) => console.log(error || success));
