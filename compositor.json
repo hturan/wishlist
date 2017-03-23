@@ -1,0 +1,95 @@
+{
+  "name": "hturan/wishlist",
+  "version": "0.1.4",
+  "libraries": {
+    "xv": "^1.1.25"
+  },
+  "title": "Wishlist",
+  "branch": "master",
+  "style": {
+    "name": "Brutalist",
+    "componentSet": {
+      "nav": "nav/BasicNav",
+      "header": "header/BasicHeader",
+      "article": "article/MarkdownArticle",
+      "footer": "footer/BasicFooter"
+    },
+    "fontFamily": "Consolas, \"Liberation Mono\", Menlo, Courier, monospace",
+    "heading": {},
+    "typeScale": [
+      48,
+      32,
+      20,
+      18,
+      16,
+      14,
+      12
+    ],
+    "layout": {
+      "maxWidth": 1024,
+      "fluid": true
+    },
+    "colors": {
+      "text": "#333",
+      "background": "#fff",
+      "primary": "#666",
+      "secondary": "#888",
+      "highlight": "#1f80ff",
+      "muted": "#f6f6f6",
+      "border": "#eee"
+    }
+  },
+  "content": [
+    {
+      "component": "nav",
+      "links": [
+        {
+          "href": "https://github.com/hturan/wishlist",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://npmjs.com/package/wishlist",
+          "text": "npm"
+        }
+      ]
+    },
+    {
+      "component": "header",
+      "heading": "wishlist",
+      "subhead": "A React-fronted and Firebase-backed wishlist",
+      "children": [
+        {
+          "component": "ui/TweetButton",
+          "text": "wishlist: A React-fronted and Firebase-backed wishlist",
+          "url": ""
+        },
+        {
+          "component": "ui/GithubButton",
+          "user": "hturan",
+          "repo": "wishlist"
+        }
+      ],
+      "text": "v1.0.0"
+    },
+    {
+      "component": "article",
+      "metadata": {
+        "source": "github.readme"
+      },
+      "html": "<h2>Wishlist</h2>\n\n<p><img src=\"http://i.imgur.com/l4YtEAJ.png\"></p>\n<h3>Data Storage</h3>\n<p>We use Firebase as the single app state atom. The main <code>App</code> component is connected to Firebase and mirrors changes to the component&apos;s state. We then pass data down as <code>props</code> to child components for rendering.</p>\n<p>Why not use <a href=\"https://github.com/tylermcginnis/re-base\"><code>re-base</code></a>? It&apos;s over-complicated for our needs. Updating a component&apos;s store on Firebase changes is a single line of code, and Firebase&apos;s library is simple enough to use directly for our needs.</p>\n<h3>Data Structure</h3>\n<p>Data is stored in Firebase in the following format:</p>\n<pre>{\n  &quot;users&quot; : {\n      &quot;[USER_ID]&quot; : {\n        &quot;lists&quot; : {\n          &quot;[LIST_ID]&quot; : {\n            &quot;items&quot; : {\n              &quot;[ITEM_ID]&quot; : {\n                &quot;title&quot;: &quot;My item&quot;,\n                &quot;url&quot;: &quot;http://amazon.com&quot;,\n                &quot;amount&quot;: 19.99,\n                &quot;currency&quot;: &quot;$&quot;\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}</pre><p>At some point in the not-so-distant future, I&#x2019;d like to de-normalize the data structure into the following:</p>\n<pre>{\n  <span class=\"hljs-attr\">&quot;users&quot;</span>: {\n    <span class=\"hljs-attr\">&quot;[USER_ID]&quot;</span>: {\n      <span class=\"hljs-attr\">&quot;lists&quot;</span>: {\n        <span class=\"hljs-attr\">&quot;[LIST_ID]&quot;</span>: <span class=\"hljs-literal\">true</span>\n      }\n    }\n  },\n  <span class=\"hljs-attr\">&quot;lists&quot;</span>: {\n    <span class=\"hljs-attr\">&quot;[LIST_ID]&quot;</span>: {\n      <span class=\"hljs-attr\">&quot;title&quot;</span>: <span class=\"hljs-string\">&quot;Music&quot;</span>,\n      <span class=\"hljs-attr\">&quot;items&quot;</span>: {\n        <span class=\"hljs-attr\">&quot;[ITEM_ID]&quot;</span>: <span class=\"hljs-literal\">true</span>,\n        <span class=\"hljs-attr\">&quot;[ITEM_ID]&quot;</span>: <span class=\"hljs-literal\">true</span>,\n        <span class=\"hljs-attr\">&quot;[ITEM_ID]&quot;</span>: <span class=\"hljs-literal\">true</span>\n      }\n    }\n  },\n  <span class=\"hljs-attr\">&quot;items&quot;</span>: {\n    <span class=\"hljs-attr\">&quot;[ITEM_ID]&quot;</span> : {\n      <span class=\"hljs-attr\">&quot;title&quot;</span>: <span class=\"hljs-string\">&quot;My item&quot;</span>,\n      <span class=\"hljs-attr\">&quot;url&quot;</span>: <span class=\"hljs-string\">&quot;http://amazon.com&quot;</span>,\n      <span class=\"hljs-attr\">&quot;amount&quot;</span>: <span class=\"hljs-number\">19.99</span>,\n      <span class=\"hljs-attr\">&quot;currency&quot;</span>: <span class=\"hljs-string\">&quot;$&quot;</span>\n    }\n  }      \n}</pre><h3>To Do</h3>\n<ul>\n<li>[x] <code>npm</code> build/serve scripts</li>\n<li>[x] Editable items</li>\n<li>[ ] Sorting</li>\n<li>[ ] Domain visualisation (hostname, favicons)</li>\n<li>[ ] Firebase de-normalization</li>\n</ul>\n"
+    },
+    {
+      "component": "footer",
+      "links": [
+        {
+          "href": "https://github.com/hturan/wishlist",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://github.com/hturan",
+          "text": "hturan"
+        }
+      ]
+    }
+  ]
+}
